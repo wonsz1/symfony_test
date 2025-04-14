@@ -2,9 +2,80 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
         {% block stylesheets %}
+        <style>
+            :root {
+                --primary-color: #2563eb;
+                --text-color: #1f2937;
+                --bg-color: #ffffff;
+                --secondary-bg: #f3f4f6;
+            }
+            
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
+            body {
+                font-family: 'Inter', system-ui, -apple-system, sans-serif;
+                line-height: 1.5;
+                color: var(--text-color);
+                background-color: var(--bg-color);
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 1rem;
+            }
+            
+            .navbar {
+                background-color: var(--bg-color);
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                padding: 1rem 0;
+            }
+            
+            .main-content {
+                padding: 2rem 0;
+            }
+            
+            h1, h2, h3, h4, h5, h6 {
+                font-weight: 600;
+                margin-bottom: 1rem;
+            }
+            
+            p {
+                margin-bottom: 1rem;
+            }
+            
+            .btn {
+                display: inline-block;
+                padding: 0.5rem 1rem;
+                background-color: var(--primary-color);
+                color: white;
+                text-decoration: none;
+                border-radius: 0.375rem;
+                font-weight: 500;
+                transition: background-color 0.2s;
+            }
+            
+            .btn:hover {
+                background-color: #1d4ed8;
+            }
+            
+            @media (max-width: 768px) {
+                .container {
+                    padding: 0 1.5rem;
+                }
+            }
+        </style>
         {% endblock %}
 
         {% block javascripts %}
@@ -12,6 +83,15 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <nav class="navbar">
+            <div class="container">
+                {% block navigation %}{% endblock %}
+            </div>
+        </nav>
+        <main class="main-content">
+            <div class="container">
+                {% block body %}{% endblock %}
+            </div>
+        </main>
     </body>
 </html>
