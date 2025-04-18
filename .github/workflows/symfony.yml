@@ -41,6 +41,14 @@ jobs:
       run: |
         mkdir -p data
         touch data/database.sqlite
+    - name: Ensure .env file exists
+      run: |
+        if [ ! -f .env ]; then
+          echo "Creating default .env file"
+          echo "APP_ENV=test" > .env
+          echo "APP_SECRET=test_secret_value_for_github_actions" >> .env
+          echo "DATABASE_URL=sqlite:///%kernel.project_dir%/data/database.sqlite" >> .env
+        fi
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
