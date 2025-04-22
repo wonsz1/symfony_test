@@ -1,0 +1,56 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\Comment;
+use App\Form\CommentType;
+use App\Repository\CommentRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
+class CommentController extends AbstractController
+{
+    #[Route('/comment/approve/{id}', name: 'comment_approve')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function approve(Comment $comment, EntityManagerInterface $em): Response
+    {
+        $comment->setIsApproved(true);
+        $em->flush();
+        return $this->redirectToRoute('post_show', ['slug' => $comment->getPost()->getSlug()]);
+    }
+
+    #[Route('/comment/delete/{id}', name: 'comment_delete')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function delete(Comment $comment, EntityManagerInterface $em): Response
+    {
+        $postSlug = $comment->getPost()->getSlug();
+        $em->remove($comment);
+        $em->flush();
+        return $this->redirectToRoute('post_show', ['slug' => $postSlug]);
+    }
+
+    #[Route('/comment/add/{postSlug}', name: 'comment_add')]
+    public function add(Request $request, string $postSlug, EntityManagerInterface $em): Response
+    {
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setAuthor($this->getUser());
+            $comment->setCreatedAt(new \DateTimeImmutable());
+            // Odszukaj post po slug
+            $post = $em->getRepository('App:Post')->findOneBy(['slug' => $postSlug]);
+            $comment->setPost($post);
+            $em->persist($comment);
+            $em->flush();
+            return $this->redirectToRoute('post_show', ['slug' => $postSlug]);
+        }
+        return $this->render('comment/add.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+}
