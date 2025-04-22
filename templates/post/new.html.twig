@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+{% block title %}Dodaj nowy post{% endblock %}
+{% block body %}
+<h1>Dodaj nowy post</h1>
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-success">Zapisz</button>
+{{ form_end(form) }}
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ category.name }}{% endblock %}
+{% block body %}
+<h1>{{ category.name }}</h1>
+<p>{{ category.description }}</p>
+<ul>
+    {% for post in category.posts %}
+        <li><a href="{{ path('post_show', {'slug': post.slug}) }}">{{ post.title }}</a></li>
+    {% else %}
+        <li>Brak postów w tej kategorii.</li>
+    {% endfor %}
+</ul>
+<a href="{{ path('category_edit', {'slug': category.slug}) }}" class="btn btn-warning">Edytuj</a>
+<form method="post" action="{{ path('category_delete', {'slug': category.slug}) }}" style="display:inline-block;">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ category.id) }}">
+    <button class="btn btn-danger">Usuń</button>
+</form>
+{% endblock %}

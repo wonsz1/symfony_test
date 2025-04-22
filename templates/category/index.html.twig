@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+{% block title %}Kategorie{% endblock %}
+{% block body %}
+<h1>Kategorie</h1>
+<ul>
+    {% for category in categories %}
+        <li><a href="{{ path('category_show', {'slug': category.slug}) }}">{{ category.name }}</a></li>
+    {% else %}
+        <li>Brak kategorii.</li>
+    {% endfor %}
+</ul>
+<a href="{{ path('category_new') }}" class="btn btn-primary">Dodaj kategorię</a>
+{% endblock %}
