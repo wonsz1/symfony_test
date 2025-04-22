@@ -9,10 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Post;
 use App\Entity\Comment;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -20,8 +22,8 @@ class User
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Assert\Email(message: 'Podany email {{ value }} nie jest prawidłowym adresem email.')]
-    #[Assert\NotBlank(message: 'Email jest wymagany.')]
+    #[Assert\Email(message: 'Given email {{ value }} is not a valid email address.')]
+    #[Assert\NotBlank(message: 'Email is required.')]
     #[Assert\Length(max: 180)]
     private ?string $email = null;
 
@@ -30,12 +32,12 @@ class User
 
     #[ORM\Column(length: 100)]
     #[Assert\Length(max: 100)]
-    #[Assert\NotBlank(message: 'Imie jest wymagane.')]
+    #[Assert\NotBlank(message: 'First name is required.')]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 100)]
     #[Assert\Length(max: 100)]
-    #[Assert\NotBlank(message: 'Nazwisko jest wymagane.')]
+    #[Assert\NotBlank(message: 'Last name is required.')]
     private ?string $lastName = null;
 
     #[ORM\Column]
@@ -50,11 +52,11 @@ class User
     #[ORM\Column(nullable: true)]
     private ?array $roles = null;
 
-    // RELACJE: Jeden autor -> wiele postów
+    // RELATIONSHIPS: One author -> many posts
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Post::class)]
     private Collection $posts;
 
-    // RELACJE: Jeden użytkownik -> wiele komentarzy
+    // RELATIONSHIPS: One user -> many comments
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class)]
     private Collection $comments;
 
@@ -157,8 +159,7 @@ class User
 
     public function getRoles(): array
     {
-        $roles = $this->roles ?? [];
-        $roles[] = 'ROLE_USER';
+        $roles = $this->roles ?? ['ROLE_USER'];
         return array_unique($roles);
     }
 
@@ -215,5 +216,15 @@ class User
             }
         }
         return $this;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary sensitive data in memory, clear it here
     }
 }
