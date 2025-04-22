@@ -1,0 +1,1 @@
+Projekt prostej aplikacji bloga w Symfony
