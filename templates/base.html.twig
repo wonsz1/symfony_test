@@ -85,7 +85,18 @@
     <body>
         <nav class="navbar">
             <div class="container">
-                {% block navigation %}{% endblock %}
+                <header>
+                    {% if app.user %}
+                        <div class="user-info">
+                            You are logged in as: <strong>{{ app.user.firstName }} {{ app.user.lastName }}</strong>
+                        </div>
+                    {% else %}
+                        <div class="user-info">
+                            You are not logged in
+                        </div>
+                    {% endif %}
+                    {% block navigation %}{% endblock %}
+                </header>
             </div>
         </nav>
         <main class="main-content">
