@@ -3,30 +3,30 @@
 {% block body %}
 <article>
     <h1>{{ post.title }}</h1>
-    <p>Kategoria: <a href="{{ path('category_show', {'slug': post.category.slug}) }}">{{ post.category.name }}</a></p>
-    <p>Autor: {{ post.author.firstName }} {{ post.author.lastName }}</p>
+    <p>Category: <a href="{{ path('category_show', {'slug': post.category.slug}) }}">{{ post.category.name }}</a></p>
+    <p>Author: {{ post.author.firstName }} {{ post.author.lastName }}</p>
     <p>Status: {{ post.status }}</p>
-    <p>Opublikowano: {{ post.publishedAt ? post.publishedAt|date('Y-m-d H:i') : '---' }}</p>
+    <p>Published: {{ post.publishedAt ? post.publishedAt|date('Y-m-d H:i') : '---' }}</p>
     {% if post.featuredImage %}
-        <img src="/uploads/{{ post.featuredImage }}" alt="Obrazek przewodni" style="max-width:400px;"/>
+        <img src="/uploads/{{ post.featuredImage }}" alt="Featured Image" style="max-width:400px;"/>
     {% endif %}
     <div>{{ post.content|raw }}</div>
 </article>
-<a href="{{ path('post_edit', {'slug': post.slug}) }}" class="btn btn-warning">Edytuj</a>
+<a href="{{ path('post_edit', {'slug': post.slug}) }}" class="btn btn-warning">Edit</a>
 <form method="post" action="{{ path('post_delete', {'slug': post.slug}) }}" style="display:inline-block;">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ post.id) }}">
-    <button class="btn btn-danger">Usuń</button>
+    <button class="btn btn-danger">Delete</button>
 </form>
 <hr>
-<h2>Komentarze</h2>
+<h2>Comments</h2>
 <ul>
     {% for comment in post.comments %}
         {% if comment.isApproved %}
         <li>{{ comment.author.email }}: {{ comment.content }}</li>
         {% endif %}
     {% else %}
-        <li>Brak komentarzy.</li>
+        <li>No comments.</li>
     {% endfor %}
 </ul>
-<a href="{{ path('comment_add', {'postSlug': post.slug}) }}" class="btn btn-primary">Dodaj komentarz</a>
+<a href="{{ path('comment_add', {'postSlug': post.slug}) }}" class="btn btn-primary">Add Comment</a>
 {% endblock %}

@@ -24,7 +24,7 @@ final class Version20250422BlogInit extends AbstractMigration
             first_name VARCHAR(100) NOT NULL,
             last_name VARCHAR(100) NOT NULL,
             created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
-            last_login_at TIMESTAMP(0) WITHOUT TIME ZONE,
+            last_login_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL,
             is_active BOOLEAN NOT NULL,
             roles JSON DEFAULT NULL
         )');
