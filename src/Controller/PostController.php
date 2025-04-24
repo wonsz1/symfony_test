@@ -24,7 +24,7 @@ class PostController extends AbstractController
     }
 
     #[Route('/post/new', name: 'post_new')]
-    #[IsGranted('ROLE_AUTHOR')]
+    #[IsGranted('ROLE_USER')]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
         $post = new Post();
@@ -50,7 +50,7 @@ class PostController extends AbstractController
     }
 
     #[Route('/post/{slug}/edit', name: 'post_edit')]
-    #[IsGranted('ROLE_AUTHOR')]
+    #[IsGranted('ROLE_USER')]
     public function edit(Request $request, Post $post, EntityManagerInterface $em): Response
     {
         $this->denyAccessUnlessGranted('EDIT', $post);
@@ -67,11 +67,11 @@ class PostController extends AbstractController
     }
 
     #[Route('/post/{slug}/delete', name: 'post_delete', methods: ['POST'])]
-    #[IsGranted('ROLE_AUTHOR')]
+    #[IsGranted('ROLE_USER')]
     public function delete(Request $request, Post $post, EntityManagerInterface $em): Response
     {
         $this->denyAccessUnlessGranted('DELETE', $post);
-        if ($this->isCsrfTokenValid('delete'.$post->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $post->getId(), $request->request->get('_token'))) {
             $em->remove($post);
             $em->flush();
         }
