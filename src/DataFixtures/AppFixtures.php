@@ -29,7 +29,6 @@ class AppFixtures extends Fixture
         );
         $manager->persist($admin);
 
-        // Możesz dodać inne encje/fixtury tutaj
         $manager->flush();
     }
 }

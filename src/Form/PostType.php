@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\Post;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -20,7 +19,6 @@ class PostType extends AbstractType
     {
         $builder
             ->add('title', TextType::class)
-            ->add('slug', TextType::class)
             ->add('content', TextareaType::class, [
                 'attr' => ['class' => 'wysiwyg'],
             ])
@@ -41,9 +39,6 @@ class PostType extends AbstractType
                     'Opublikowany' => 'published',
                     'Zarchiwizowany' => 'archived',
                 ],
-            ])
-            ->add('publishedAt', DateTimeType::class, [
-                'required' => false,
             ])
         ;
     }
