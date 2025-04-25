@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Comments{% endblock %}
+
+{% block body %}
+<h1>Lista komentarzy</h1>
+<a href="{{ path('admin_dashboard') }}">&larr; Powrót do panelu</a>
+<table class="table">
+    <thead>
+        <tr><th>ID</th><th>Content</th><th>Author</th><th>Post</th><th>Approved</th><th>Created</th></tr>
+    </thead>
+    <tbody>
+    {% for comment in comments %}
+        <tr>
+            <td>{{ comment.id }}</td>
+            <td>{{ comment.content|length > 40 ? comment.content|slice(0,40) ~ '…' : comment.content }}</td>
+            <td>{{ comment.author ? comment.author.email : '—' }}</td>
+            <td><a href="{{ path('post_show', {'slug': comment.post.slug}) }}">{{ comment.post.title }}</a></td>
+            <td>{% if comment.isApproved %}✔{% else %}✖{% endif %}</td>
+            <td>{{ comment.createdAt|date('Y-m-d H:i') }}</td>
+        </tr>
+    {% else %}
+        <tr><td colspan="6">No comments found.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
