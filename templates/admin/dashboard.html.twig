@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Panel{% endblock %}
+
+{% block body %}
+<h1>Admin Dashboard</h1>
+
+<nav>
+    <ul style="list-style:none;padding:0;">
+        <li><a href="{{ path('admin_posts') }}">Lista postów</a></li>
+        <li><a href="{{ path('admin_comments') }}">Lista komentarzy</a></li>
+        <li><a href="{{ path('admin_users') }}">Lista użytkowników</a></li>
+    </ul>
+</nav>
+{% endblock %}

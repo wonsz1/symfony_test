@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Posts{% endblock %}
+
+{% block body %}
+<h1>Lista postów</h1>
+<a href="{{ path('admin_dashboard') }}">&larr; Powrót do panelu</a>
+<table class="table">
+    <thead>
+        <tr><th>ID</th><th>Title</th><th>Status</th><th>Author</th><th>Created</th></tr>
+    </thead>
+    <tbody>
+    {% for post in posts %}
+        <tr>
+            <td>{{ post.id }}</td>
+            <td><a href="{{ path('post_show', {'slug': post.slug}) }}">{{ post.title }}</a></td>
+            <td>{{ post.status }}</td>
+            <td>{{ post.author.email }}</td>
+            <td>{{ post.createdAt|date('Y-m-d H:i') }}</td>
+        </tr>
+    {% else %}
+        <tr><td colspan="5">No posts found.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
