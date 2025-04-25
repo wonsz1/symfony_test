@@ -32,6 +32,15 @@ class PostController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $post->setAuthor($this->getUser());
+            // Generate slug from title
+            $slug = $this->slugify($post->getTitle());
+            $post->setSlug($slug);
+            // Set publishedAt only if status is 'published'
+            if ($post->getStatus() === 'published') {
+                $post->setPublishedAt(new \DateTimeImmutable());
+            } else {
+                $post->setPublishedAt(null);
+            }
             $em->persist($post);
             $em->flush();
             return $this->redirectToRoute('post_index');
@@ -41,9 +50,24 @@ class PostController extends AbstractController
         ]);
     }
 
-    #[Route('/post/{slug}', name: 'post_show')]
-    public function show(Post $post): Response
+    private function slugify(string $text): string
     {
+        // Replace non letter or digits by -
+        $text = preg_replace('~[\s\W]+~', '-', $text);
+        // Trim
+        $text = trim($text, '-');
+        // Lowercase
+        $text = strtolower($text);
+        return $text ?: 'n-a';
+    }
+
+    #[Route('/post/{slug}', name: 'post_show')]
+    public function show(string $slug, PostRepository $postRepository): Response
+    {
+        $post = $postRepository->findOneBy(['slug' => $slug]);
+        if (!$post) {
+            throw $this->createNotFoundException('Post not found');
+        }
         return $this->render('post/show.html.twig', [
             'post' => $post,
         ]);
@@ -51,12 +75,25 @@ class PostController extends AbstractController
 
     #[Route('/post/{slug}/edit', name: 'post_edit')]
     #[IsGranted('ROLE_USER')]
-    public function edit(Request $request, Post $post, EntityManagerInterface $em): Response
+    public function edit(Request $request, string $slug, EntityManagerInterface $em): Response
     {
+        if (!$this->getUser()) {
+            throw new \Exception('User not authenticated');
+        }
+        $post = $em->getRepository(Post::class)->findOneBy(['slug' => $slug]);
+        if (!$post) {
+            throw $this->createNotFoundException('Post not found');
+        }
         $this->denyAccessUnlessGranted('EDIT', $post);
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            // Set publishedAt only if status is 'published'
+            if ($post->getStatus() === 'published' && !$post->getPublishedAt()) {
+                $post->setPublishedAt(new \DateTimeImmutable());
+            } elseif ($post->getStatus() !== 'published') {
+                $post->setPublishedAt(null);
+            }
             $em->flush();
             return $this->redirectToRoute('post_show', ['slug' => $post->getSlug()]);
         }
@@ -68,8 +105,12 @@ class PostController extends AbstractController
 
     #[Route('/post/{slug}/delete', name: 'post_delete', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
-    public function delete(Request $request, Post $post, EntityManagerInterface $em): Response
+    public function delete(Request $request, string $slug, EntityManagerInterface $em): Response
     {
+        $post = $em->getRepository(Post::class)->findOneBy(['slug' => $slug]);
+        if (!$post) {
+            throw $this->createNotFoundException('Post not found');
+        }
         $this->denyAccessUnlessGranted('DELETE', $post);
         if ($this->isCsrfTokenValid('delete' . $post->getId(), $request->request->get('_token'))) {
             $em->remove($post);
