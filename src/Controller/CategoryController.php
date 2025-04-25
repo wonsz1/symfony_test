@@ -41,8 +41,12 @@ class CategoryController extends AbstractController
     }
 
     #[Route('/category/{slug}', name: 'category_show')]
-    public function show(Category $category): Response
+    public function show(string $slug, CategoryRepository $categoryRepository): Response
     {
+        $category = $categoryRepository->findOneBy(['slug' => $slug]);
+        if (!$category) {
+            throw $this->createNotFoundException('Category not found');
+        }
         return $this->render('category/show.html.twig', [
             'category' => $category,
         ]);
@@ -50,8 +54,12 @@ class CategoryController extends AbstractController
 
     #[Route('/category/{slug}/edit', name: 'category_edit')]
     #[IsGranted('ROLE_ADMIN')]
-    public function edit(Request $request, Category $category, EntityManagerInterface $em): Response
+    public function edit(Request $request, string $slug, EntityManagerInterface $em): Response
     {
+        $category = $em->getRepository(Category::class)->findOneBy(['slug' => $slug]);
+        if (!$category) {
+            throw $this->createNotFoundException('Category not found');
+        }
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -66,8 +74,12 @@ class CategoryController extends AbstractController
 
     #[Route('/category/{slug}/delete', name: 'category_delete', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function delete(Request $request, Category $category, EntityManagerInterface $em): Response
+    public function delete(Request $request, string $slug, EntityManagerInterface $em): Response
     {
+        $category = $em->getRepository(Category::class)->findOneBy(['slug' => $slug]);
+        if (!$category) {
+            throw $this->createNotFoundException('Category not found');
+        }
         if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->request->get('_token'))) {
             $em->remove($category);
             $em->flush();
