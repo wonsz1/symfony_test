@@ -1,0 +1,71 @@
+:root {
+    --primary-color: #2563eb;
+    --text-color: #1f2937;
+    --bg-color: #ffffff;
+    --secondary-bg: #f3f4f6;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    line-height: 1.5;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+    font-size: 1em;
+    background: #fff;
+}
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+.table th {
+    background: #f2f2f2;
+    font-weight: bold;
+}
+.table tr:nth-child(even) {
+    background: #f9f9f9;
+}
+.table tr:hover {
+    background: #f1f7ff;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+    font-size: 1em;
+    background: #fff;
+}
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+.table th {
+    background: #f2f2f2;
+    font-weight: bold;
+}
+.table tr:nth-child(even) {
+    background: #f9f9f9;
+}
+.table tr:hover {
+    background: #f1f7ff;
+}
