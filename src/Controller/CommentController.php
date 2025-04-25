@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Form\CommentType;
-use App\Repository\CommentRepository;
+use App\Entity\Post;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,8 +25,13 @@ class CommentController extends AbstractController
 
     #[Route('/comment/delete/{id}', name: 'comment_delete')]
     #[IsGranted('ROLE_ADMIN')]
-    public function delete(Comment $comment, EntityManagerInterface $em): Response
+    public function delete(int $id, EntityManagerInterface $em): Response
     {
+        $comment = $em->getRepository(Comment::class)->find($id);
+        if (!$comment) {
+            throw $this->createNotFoundException('Comment not found');
+        }
+        $this->denyAccessUnlessGranted('DELETE', $comment);
         $postSlug = $comment->getPost()->getSlug();
         $em->remove($comment);
         $em->flush();
@@ -43,7 +48,7 @@ class CommentController extends AbstractController
             $comment->setAuthor($this->getUser());
             $comment->setCreatedAt(new \DateTimeImmutable());
             // Odszukaj post po slug
-            $post = $em->getRepository('App:Post')->findOneBy(['slug' => $postSlug]);
+            $post = $em->getRepository(Post::class)->findOneBy(['slug' => $postSlug]);
             $comment->setPost($post);
             $em->persist($comment);
             $em->flush();
