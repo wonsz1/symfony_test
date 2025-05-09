@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
+use App\DTO\CategoryDTO;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,10 +28,11 @@ class CategoryController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
-        $category = new Category();
-        $form = $this->createForm(CategoryType::class, $category);
+        $categoryDto = new CategoryDTO();
+        $form = $this->createForm(CategoryType::class, $categoryDto);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $category = $categoryDto->toEntity();
             $em->persist($category);
             $em->flush();
             return $this->redirectToRoute('category_index');
@@ -60,9 +62,11 @@ class CategoryController extends AbstractController
         if (!$category) {
             throw $this->createNotFoundException('Category not found');
         }
-        $form = $this->createForm(CategoryType::class, $category);
+        $categoryDto = CategoryDTO::fromEntity($category);
+        $form = $this->createForm(CategoryType::class, $categoryDto);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $categoryDto->toEntity($category);
             $em->flush();
             return $this->redirectToRoute('category_show', ['slug' => $category->getSlug()]);
         }
