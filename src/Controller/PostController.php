@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Post;
 use App\Form\PostType;
 use App\Repository\PostRepository;
+use App\DTO\PostDTO;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,20 +28,20 @@ class PostController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
-        $post = new Post();
-        $form = $this->createForm(PostType::class, $post);
+        $postDto = new PostDTO();
+        $form = $this->createForm(PostType::class, $postDto);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $post->setAuthor($this->getUser());
+            $postDto->setAuthor($this->getUser());
             // Generate slug from title
-            $slug = $this->slugify($post->getTitle());
-            $post->setSlug($slug);
+            $postDto->setSlug($this->slugify($postDto->getTitle()));
             // Set publishedAt only if status is 'published'
-            if ($post->getStatus() === 'published') {
-                $post->setPublishedAt(new \DateTimeImmutable());
+            if ($postDto->getStatus() === 'published') {
+                $postDto->setPublishedAt(new \DateTimeImmutable());
             } else {
-                $post->setPublishedAt(null);
+                $postDto->setPublishedAt(null);
             }
+            $post = $postDto->toEntity();
             $em->persist($post);
             $em->flush();
             return $this->redirectToRoute('post_index');
@@ -85,9 +86,11 @@ class PostController extends AbstractController
             throw $this->createNotFoundException('Post not found');
         }
         $this->denyAccessUnlessGranted('EDIT', $post);
-        $form = $this->createForm(PostType::class, $post);
+        $postDto = PostDTO::fromEntity($post);
+        $form = $this->createForm(PostType::class, $postDto);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $post = $postDto->toEntity($post);
             // Set publishedAt only if status is 'published'
             if ($post->getStatus() === 'published' && !$post->getPublishedAt()) {
                 $post->setPublishedAt(new \DateTimeImmutable());

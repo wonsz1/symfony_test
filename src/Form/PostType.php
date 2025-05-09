@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Post;
+use App\DTO\PostDTO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -46,7 +46,7 @@ class PostType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Post::class,
+            'data_class' => PostDTO::class,
         ]);
     }
 }
