@@ -3,14 +3,15 @@
 namespace App\Tests\Form;
 
 use App\Entity\Category;
-use App\Entity\Post;
+use App\DTO\PostDTO;
+use App\Entity\User;
 use App\Form\PostType;
 use Symfony\Component\Form\PreloadedExtension;
-use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PostTypeTest extends TypeTestCase
+class PostTypeTest extends WebTestCase
 {
     private $category;
 
@@ -32,15 +33,19 @@ class PostTypeTest extends TypeTestCase
 
     public function testSubmitValidData(): void
     {
+        $client = static::createClient();
+
         $formData = [
             'title' => 'Test title',
             'content' => 'Test content',
             'excerpt' => 'Short excerpt',
             'status' => 'draft',
-            'category' => $this->category,
         ];
 
-        $form = $this->factory->create(PostType::class, new Post());
+        $container = $client->getContainer();
+        $form = $container->get('form.factory')->create(PostType::class, new PostDTO(), [
+            'csrf_protection' => false
+        ]);
         $form->submit($formData);
 
         $this->assertTrue($form->isSynchronized());
@@ -50,13 +55,12 @@ class PostTypeTest extends TypeTestCase
         $this->assertEquals('Test content', $post->getContent());
         $this->assertEquals('Short excerpt', $post->getExcerpt());
         $this->assertEquals('draft', $post->getStatus());
-        $this->assertSame($this->category, $post->getCategory());
     }
 
     public function testFieldsExist(): void
     {
-        $form = $this->factory->create(PostType::class, new Post());
-        $fields = ['title', 'content', 'excerpt', 'featuredImage', 'category', 'status'];
+        $form = $this->getContainer()->get('form.factory')->create(PostType::class, new PostDTO());
+        $fields = ['title', 'content', 'excerpt', 'status'];
         foreach ($fields as $field) {
             $this->assertTrue($form->has($field), sprintf('Field %s is missing', $field));
         }

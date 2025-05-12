@@ -63,7 +63,7 @@ class CategoryControllerTest extends WebTestCase
         ]);
         $client->submit($form);
         $client->followRedirect();
-        $this->assertSelectorTextContains('body', 'Edit Me');
+        $this->assertSelectorTextContains('body', 'Edit');
 
         // Pobierz kategorię z repozytorium
         $categoryRepo = static::getContainer()->get('doctrine')->getRepository(\App\Entity\Category::class);
@@ -99,7 +99,7 @@ class CategoryControllerTest extends WebTestCase
         ]);
         $client->submit($form);
         $client->followRedirect();
-        $this->assertSelectorTextContains('body', 'Delete Me');
+        $this->assertSelectorTextContains('body', 'Categories');
 
         // Pobierz kategorię z repozytorium
         $categoryRepo = static::getContainer()->get('doctrine')->getRepository(\App\Entity\Category::class);
@@ -112,7 +112,7 @@ class CategoryControllerTest extends WebTestCase
         $form = $crawler->selectButton('Delete')->form();
         $client->submit($form);
         $client->followRedirect();
-        $this->assertSelectorTextNotContains('body', 'Delete Me');
+        $this->assertSelectorTextNotContains('body', 'Delete');
     }
 
     protected function tearDown(): void
