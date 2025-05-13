@@ -4,7 +4,6 @@ namespace App\Tests\Form;
 
 use App\Entity\Category;
 use App\DTO\PostDTO;
-use App\Entity\User;
 use App\Form\PostType;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
