@@ -17,7 +17,10 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            custom_authenticator: App\Security\FormCustomAuthenticator
+            custom_authenticator:
+                - App\Security\FormCustomAuthenticator
+                - App\Security\GoogleAuthenticator
+            entry_point: App\Security\FormCustomAuthenticator
             logout:
                 path: app_logout
                 target: homepage
@@ -31,6 +34,7 @@ security:
     access_control:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: ^/connect/google, roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/user, roles: ROLE_ADMIN }
         - { path: ^/post/new, roles: ROLE_USER }

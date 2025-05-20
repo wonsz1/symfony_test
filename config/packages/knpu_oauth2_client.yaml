@@ -1,0 +1,11 @@
+knpu_oauth2_client:
+    clients:
+        google:
+            type: google
+            client_id: '%env(OAUTH_GOOGLE_CLIENT_ID)%'
+            client_secret: '%env(OAUTH_GOOGLE_CLIENT_SECRET)%'
+            redirect_route: connect_google_check
+            redirect_params: {}
+            # You can also configure multiple redirect URIs in Google Console:
+            # - http://localhost:8080/connect/google/check
+            # - https://test.symfony.dev/connect/google/check
