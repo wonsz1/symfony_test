@@ -15,6 +15,7 @@ run commands:
 bin/console --env=test doctrine:database:create
 php bin/console --env=test doctrine:schema:create
 php bin/console --env=test doctrine:fixtures:load
+docker-compose exec php bin/console doctrine:migrations:migrate --env=test
 
 docker-compose exec php bin/phpunit
 docker-compose exec php ./vendor/bin/behat
