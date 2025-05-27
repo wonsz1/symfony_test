@@ -16,11 +16,16 @@ use Symfony\Component\Routing\RouterInterface;
 
 class GoogleAuthenticatorTest extends TestCase
 {
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private ClientRegistry $clientRegistry;
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private EntityManagerInterface $entityManager;
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private RouterInterface $router;
     private GoogleAuthenticator $authenticator;
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private OAuth2Client $oauth2Client;
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private EntityRepository $userRepository;
 
     protected function setUp(): void
