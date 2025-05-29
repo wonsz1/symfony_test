@@ -154,7 +154,7 @@ class PostDTO
         $dto->setCreatedAt($post->getCreatedAt());
         $dto->setUpdatedAt($post->getUpdatedAt());
         $dto->setPublishedAt($post->getPublishedAt());
-        $dto->setStatus($post->getStatus());
+        $dto->setStatus(PostStatus::from($post->getStatus()));
         $dto->setAuthor($post->getAuthor());
         $dto->setCategory($post->getCategory());
         return $dto;
