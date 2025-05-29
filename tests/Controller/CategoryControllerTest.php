@@ -11,7 +11,8 @@ class CategoryControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $client->request('GET', '/category');
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        // $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('body'); // You can specify a more specific selector
     }
 

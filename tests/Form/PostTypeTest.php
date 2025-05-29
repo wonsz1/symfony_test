@@ -5,6 +5,7 @@ namespace App\Tests\Form;
 use App\Entity\Category;
 use App\DTO\PostDTO;
 use App\Form\PostType;
+use App\Enumerations\PostStatus;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Form\AbstractType;
@@ -53,7 +54,7 @@ class PostTypeTest extends WebTestCase
         $this->assertEquals('Test title', $post->getTitle());
         $this->assertEquals('Test content', $post->getContent());
         $this->assertEquals('Short excerpt', $post->getExcerpt());
-        $this->assertEquals('draft', $post->getStatus());
+        $this->assertEquals(PostStatus::DRAFT, $post->getStatus());
     }
 
     public function testFieldsExist(): void
