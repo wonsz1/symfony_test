@@ -13,6 +13,8 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post as PostOperation;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\ApiProperty;
+use App\Enumerations\PostStatus;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 #[ApiResource(
@@ -36,12 +38,17 @@ class Post
 
     #[ORM\Column(length: 255)]
     #[Groups(['post:read', 'post:write'])]
+    #[ApiProperty(example: 'My First Post')]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, unique: true)]
+    #[Groups(['post:read', 'post:write'])]
+    #[ApiProperty(example: 'my-first-post')]
     private ?string $slug = null;
 
     #[ORM\Column(type: 'text')]
+    #[Groups(['post:read', 'post:write'])]
+    #[ApiProperty(example: 'This is the content of my first post.')]
     private ?string $content = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
@@ -60,7 +67,7 @@ class Post
     private ?\DateTimeImmutable $publishedAt = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $status = null;
+    private ?PostStatus $status = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'posts')]
     #[ORM\JoinColumn(nullable: false)]
@@ -83,32 +90,135 @@ class Post
         $this->viewCount = 0;
     }
 
-    public function getId(): ?int { return $this->id; }
-    public function getTitle(): ?string { return $this->title; }
-    public function setTitle(string $title): static { $this->title = $title; return $this; }
-    public function getSlug(): ?string { return $this->slug; }
-    public function setSlug(string $slug): static { $this->slug = $slug; return $this; }
-    public function getContent(): ?string { return $this->content; }
-    public function setContent(string $content): static { $this->content = $content; return $this; }
-    public function getExcerpt(): ?string { return $this->excerpt; }
-    public function setExcerpt(?string $excerpt): static { $this->excerpt = $excerpt; return $this; }
-    public function getFeaturedImage(): ?string { return $this->featuredImage; }
-    public function setFeaturedImage(?string $featuredImage): static { $this->featuredImage = $featuredImage; return $this; }
-    public function getCreatedAt(): ?\DateTimeImmutable { return $this->createdAt; }
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static { $this->createdAt = $createdAt; return $this; }
-    public function getUpdatedAt(): ?\DateTimeImmutable { return $this->updatedAt; }
-    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static { $this->updatedAt = $updatedAt; return $this; }
-    public function getPublishedAt(): ?\DateTimeImmutable { return $this->publishedAt; }
-    public function setPublishedAt(?\DateTimeImmutable $publishedAt): static { $this->publishedAt = $publishedAt; return $this; }
-    public function getStatus(): ?string { return $this->status; }
-    public function setStatus(string $status): static { $this->status = $status; return $this; }
-    public function getAuthor(): ?User { return $this->author; }
-    public function setAuthor(?User $author): static { $this->author = $author; return $this; }
-    public function getCategory(): ?Category { return $this->category; }
-    public function setCategory(?Category $category): static { $this->category = $category; return $this; }
-    public function getViewCount(): int { return $this->viewCount; }
-    public function setViewCount(int $viewCount): static { $this->viewCount = $viewCount; return $this; }
-    public function getComments(): Collection { return $this->comments; }
-    public function addComment(Comment $comment): static { if (!$this->comments->contains($comment)) { $this->comments[] = $comment; $comment->setPost($this); } return $this; }
-    public function removeComment(Comment $comment): static { if ($this->comments->removeElement($comment)) { if ($comment->getPost() === $this) { $comment->setPost(null); } } return $this; }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+    public function setTitle(string $title): static
+    {
+        $this->title = $title;
+        return $this;
+    }
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+        return $this;
+    }
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+    public function setContent(string $content): static
+    {
+        $this->content = $content;
+        return $this;
+    }
+    public function getExcerpt(): ?string
+    {
+        return $this->excerpt;
+    }
+    public function setExcerpt(?string $excerpt): static
+    {
+        $this->excerpt = $excerpt;
+        return $this;
+    }
+    public function getFeaturedImage(): ?string
+    {
+        return $this->featuredImage;
+    }
+    public function setFeaturedImage(?string $featuredImage): static
+    {
+        $this->featuredImage = $featuredImage;
+        return $this;
+    }
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+    public function getPublishedAt(): ?\DateTimeImmutable
+    {
+        return $this->publishedAt;
+    }
+    public function setPublishedAt(?\DateTimeImmutable $publishedAt): static
+    {
+        $this->publishedAt = $publishedAt;
+        return $this;
+    }
+    public function getStatus(): ?string
+    {
+        return $this->status->value;
+    }
+    public function setStatus(PostStatus $status): static
+    {
+        $this->status = $status;
+        return $this;
+    }
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
+        return $this;
+    }
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
+        return $this;
+    }
+    public function getViewCount(): int
+    {
+        return $this->viewCount;
+    }
+    public function setViewCount(int $viewCount): static
+    {
+        $this->viewCount = $viewCount;
+        return $this;
+    }
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setPost($this);
+        } return $this;
+    }
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            if ($comment->getPost() === $this) {
+                $comment->setPost(null);
+            }
+        } return $this;
+    }
 }

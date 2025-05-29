@@ -11,7 +11,9 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use App\Entity\Category;
+use App\Enumerations\PostStatus;
 
 class PostType extends AbstractType
 {
@@ -33,12 +35,8 @@ class PostType extends AbstractType
                 'class' => Category::class,
                 'choice_label' => 'name',
             ])
-            ->add('status', ChoiceType::class, [
-                'choices' => [
-                    'Szkic' => 'draft',
-                    'Opublikowany' => 'published',
-                    'Zarchiwizowany' => 'archived',
-                ],
+            ->add('status', EnumType::class, [
+                'class' => PostStatus::class,
             ])
         ;
     }

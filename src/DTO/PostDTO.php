@@ -6,6 +6,7 @@ use App\Entity\Post;
 use App\Entity\User;
 use App\Entity\Category;
 use DateTimeImmutable;
+use App\Enumerations\PostStatus;
 
 class PostDTO
 {
@@ -17,7 +18,7 @@ class PostDTO
     private ?DateTimeImmutable $createdAt = null;
     private ?DateTimeImmutable $updatedAt = null;
     private ?DateTimeImmutable $publishedAt = null;
-    private ?string $status = null;
+    private ?PostStatus $status = null;
     private ?User $author = null;
     private ?Category $category = null;
 
@@ -109,12 +110,12 @@ class PostDTO
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?PostStatus
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): self
+    public function setStatus(PostStatus $status): self
     {
         $this->status = $status;
         return $this;

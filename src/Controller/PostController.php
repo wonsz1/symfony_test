@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Enumerations\PostStatus;
 
 class PostController extends AbstractController
 {
@@ -36,7 +37,7 @@ class PostController extends AbstractController
             // Generate slug from title
             $postDto->setSlug($this->slugify($postDto->getTitle()));
             // Set publishedAt only if status is 'published'
-            if ($postDto->getStatus() === 'published') {
+            if ($postDto->getStatus() === PostStatus::PUBLISHED) {
                 $postDto->setPublishedAt(new \DateTimeImmutable());
             } else {
                 $postDto->setPublishedAt(null);
@@ -92,9 +93,9 @@ class PostController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $post = $postDto->toEntity($post);
             // Set publishedAt only if status is 'published'
-            if ($post->getStatus() === 'published' && !$post->getPublishedAt()) {
+            if ($post->getStatus() === PostStatus::PUBLISHED && !$post->getPublishedAt()) {
                 $post->setPublishedAt(new \DateTimeImmutable());
-            } elseif ($post->getStatus() !== 'published') {
+            } elseif ($post->getStatus() !== PostStatus::PUBLISHED) {
                 $post->setPublishedAt(null);
             }
             $em->flush();
