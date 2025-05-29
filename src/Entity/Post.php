@@ -67,14 +67,20 @@ class Post
     private ?\DateTimeImmutable $publishedAt = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['post:read', 'post:write'])]
+    #[ApiProperty(example: 'draft')]
     private ?PostStatus $status = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'posts')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['post:read', 'post:write'])]
+    #[ApiProperty(example: '/api/users/1')]
     private ?User $author = null;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'posts')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['post:read', 'post:write'])]
+    #[ApiProperty(example: '/api/categories/1')]
     private ?Category $category = null;
 
     #[ORM\Column(type: 'integer', options: ['default' => 0])]

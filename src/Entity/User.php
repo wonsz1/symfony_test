@@ -18,6 +18,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post as PostOperation;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\ApiProperty;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 
@@ -50,6 +51,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Email(message: 'Given email {{ value }} is not a valid email address.')]
     #[Assert\NotBlank(message: 'Email is required.')]
     #[Assert\Length(max: 180)]
+    #[Groups(['user:read', 'user:write'])]
+    #[ApiProperty(example: 'user@example.com')]
     private ?string $email = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -58,11 +61,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 100)]
     #[Assert\Length(max: 100)]
     #[Assert\NotBlank(message: 'First name is required.')]
+    #[Groups(['user:read', 'user:write'])]
+    #[ApiProperty(example: 'John')]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 100)]
     #[Assert\Length(max: 100)]
     #[Assert\NotBlank(message: 'Last name is required.')]
+    #[Groups(['user:read', 'user:write'])]
+    #[ApiProperty(example: 'Doe')]
     private ?string $lastName = null;
 
     #[ORM\Column]
