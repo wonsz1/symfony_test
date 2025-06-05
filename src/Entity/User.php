@@ -51,7 +51,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Email(message: 'Given email {{ value }} is not a valid email address.')]
     #[Assert\NotBlank(message: 'Email is required.')]
     #[Assert\Length(max: 180)]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['user:read', 'user:write', 'post:read'])]
     #[ApiProperty(example: 'user@example.com')]
     private ?string $email = null;
 
