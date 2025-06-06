@@ -23,3 +23,9 @@ docker-compose exec php ./vendor/bin/behat
 Migrations:
 bin/console doctrine:migrations:diff
 bin/console doctrine:migrations:migrate
+
+GraphQL:
+http://localhost:8080/api/graphql
+
+OpenAPI:
+http://localhost:8080/api/docs
