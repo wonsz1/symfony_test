@@ -1,9 +1,10 @@
-import { OpenApiAdmin } from "@api-platform/admin";
+import { HydraAdmin, ResourceGuesser } from '@api-platform/admin';
 
-// Replace with your own API entrypoint
 export const App = () => (
-  <OpenApiAdmin
-    entrypoint="http://localhost:8080/api"
-    docEntrypoint="http://localhost:8080/api/docs.jsonopenapi"
-  />
+  <HydraAdmin entrypoint="http://localhost:8080/api">
+    <ResourceGuesser name="posts" />
+    <ResourceGuesser name="categories" />
+    <ResourceGuesser name="comments" />
+    <ResourceGuesser name="users" />
+  </HydraAdmin>
 );
