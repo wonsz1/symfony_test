@@ -11,7 +11,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post as PostOperation;
-use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\ApiProperty;
 use App\Enumerations\PostStatus;
@@ -22,7 +22,7 @@ use App\Enumerations\PostStatus;
         new GetCollection(),
         new Get(),
         new PostOperation(),
-        new Put(),
+        new Patch(),
         new Delete()
     ],
     normalizationContext: ['groups' => ['post:read']],

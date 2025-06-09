@@ -16,7 +16,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post as PostOperation;
-use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\ApiProperty;
 use Symfony\Component\Uid\Uuid;
@@ -29,7 +29,7 @@ use Symfony\Component\Uid\UuidV4;
         new GetCollection(),
         new Get(),
         new PostOperation(),
-        new Put(),
+        new Patch(),
         new Delete()
     ],
     normalizationContext: ['groups' => ['user:read']],

@@ -12,7 +12,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post as PostOperation;
-use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
@@ -21,7 +21,7 @@ use ApiPlatform\Metadata\Delete;
         new GetCollection(),
         new Get(),
         new PostOperation(),
-        new Put(),
+        new Patch(),
         new Delete()
     ],
     normalizationContext: ['groups' => ['category:read']],
