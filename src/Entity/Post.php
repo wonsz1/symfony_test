@@ -52,18 +52,22 @@ class Post
     private ?string $content = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Groups(['post:read'])]
     private ?string $excerpt = null;
 
     #[ORM\Column(nullable: true)]
     private ?string $featuredImage = null;
 
     #[ORM\Column]
+    #[Groups(['post:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['post:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['post:read'])]
     private ?\DateTimeImmutable $publishedAt = null;
 
     #[ORM\Column(length: 50)]
@@ -84,6 +88,7 @@ class Post
     private ?Category $category = null;
 
     #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    #[Groups(['post:read'])]
     private int $viewCount = 0;
 
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comment::class, cascade: ['remove'])]
