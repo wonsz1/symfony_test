@@ -1,5 +1,6 @@
-import { InputGuesser, EditGuesser } from "@api-platform/admin";
-import { ReferenceInput, AutocompleteInput } from 'react-admin';
+import { InputGuesser } from "@api-platform/admin";
+import { TextInput, ReferenceInput, AutocompleteInput, Edit, SimpleForm } from 'react-admin';
+import { Stack } from '@mui/material';
 
 const postEditTransform = (data: any) => {
     return {
@@ -10,17 +11,21 @@ const postEditTransform = (data: any) => {
 };
 
 export const PostEdit = () => (
-    <EditGuesser transform={postEditTransform}>
+    <Edit sx={{ maxWidth: 500 }} transform={postEditTransform} mutationMode="undoable" warnWhenUnsavedChanges>
+        <SimpleForm>
         <InputGuesser source="title" />
-        <InputGuesser source="content" />
+        <TextInput source="content" multiline />
         <InputGuesser source="excerpt" />
         <InputGuesser source="status" />
-        <ReferenceInput source="author.@id" label="Author" reference="users">
-            <AutocompleteInput label="Author" filterToQuery={(searchText: string) => ({ email: searchText })} />
-        </ReferenceInput>
-        <ReferenceInput source="category.@id" label="Category" reference="categories">
-            <AutocompleteInput label="Category" filterToQuery={(searchText: string) => ({ name: searchText })} />
-        </ReferenceInput>
-    </EditGuesser>
+        <Stack direction="row" gap={2} width="100%">
+            <ReferenceInput source="author.@id" label="Author" reference="users">
+                <AutocompleteInput label="Author" filterToQuery={(searchText: string) => ({ email: searchText })} />
+            </ReferenceInput>
+            <ReferenceInput source="category.@id" label="Category" reference="categories">
+                <AutocompleteInput label="Category" filterToQuery={(searchText: string) => ({ name: searchText })} />
+            </ReferenceInput>
+        </Stack>
+        </SimpleForm>
+    </Edit>
 );
     
