@@ -3,6 +3,7 @@ import { ReferenceField, TextField } from 'react-admin';
 
 export const PostList = () => (
     <ListGuesser>
+        <TextField source="id" />
         <FieldGuesser source="title" />
         <FieldGuesser source="excerpt" />
         <FieldGuesser source="status" />
