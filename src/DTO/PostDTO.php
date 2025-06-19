@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Entity\Category;
 use DateTimeImmutable;
 use App\Enumerations\PostStatus;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class PostDTO
 {
@@ -19,7 +20,7 @@ class PostDTO
     private ?DateTimeImmutable $updatedAt = null;
     private ?DateTimeImmutable $publishedAt = null;
     private ?PostStatus $status = null;
-    private ?User $author = null;
+    private ?UserInterface $author = null;
     private ?Category $category = null;
 
     public function getTitle(): ?string
@@ -121,12 +122,12 @@ class PostDTO
         return $this;
     }
 
-    public function getAuthor(): ?User
+    public function getAuthor(): ?UserInterface
     {
         return $this->author;
     }
 
-    public function setAuthor(?User $author): self
+    public function setAuthor(?UserInterface $author): self
     {
         $this->author = $author;
         return $this;

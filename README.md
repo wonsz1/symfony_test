@@ -29,3 +29,14 @@ http://localhost:8080/api/graphql
 
 OpenAPI:
 http://localhost:8080/api/docs
+
+API Platform Admin:
+docker-compose exec -it node10 bash 
+npm run dev
+http://localhost:5173
+
+PHPStan:
+docker-compose exec php vendor/bin/phpstan analyse src tests 
+
+Added phpstan-doctrine to fix issue - Auto-Generated ID is never assigned int
+https://github.com/phpstan/phpstan-doctrine/issues/610

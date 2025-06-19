@@ -41,11 +41,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups(['user:read'])]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(type: 'uuid', unique: true)]
     #[Groups(['user:read'])]
-    private ?Uuid $uuid = null;
+    private Uuid $uuid;
 
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\Email(message: 'Given email {{ value }} is not a valid email address.')]
@@ -53,7 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Length(max: 180)]
     #[Groups(['user:read', 'user:write', 'post:read'])]
     #[ApiProperty(example: 'user@example.com')]
-    private ?string $email = null;
+    private string $email;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $password = null;
@@ -63,23 +63,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message: 'First name is required.')]
     #[Groups(['user:read', 'user:write'])]
     #[ApiProperty(example: 'John')]
-    private ?string $firstName = null;
+    private string $firstName;
 
     #[ORM\Column(length: 100)]
     #[Assert\Length(max: 100)]
     #[Assert\NotBlank(message: 'Last name is required.')]
     #[Groups(['user:read', 'user:write'])]
     #[ApiProperty(example: 'Doe')]
-    private ?string $lastName = null;
+    private string $lastName;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $lastLoginAt = null;
 
     #[ORM\Column]
-    private ?bool $isActive = true;
+    private bool $isActive = true;
 
     #[ORM\Column(nullable: true)]
     private ?array $roles = null;
@@ -93,6 +93,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     // RELATIONSHIPS: One user -> many comments
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class)]
+    #[ORM\OrderBy(['createdAt' => 'DESC'])]
+    /** @var Collection<int, Comment> */
     private Collection $comments;
 
     public function __construct()
@@ -234,9 +236,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removePost(Post $post): static
     {
         if ($this->posts->removeElement($post)) {
-            if ($post->getAuthor() === $this) {
-                $post->setAuthor(null);
-            }
+            // if ($post->getAuthor() === $this) {
+            //     $post->setAuthor(null);
+            // }
         }
         return $this;
     }
@@ -258,9 +260,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeComment(Comment $comment): static
     {
         if ($this->comments->removeElement($comment)) {
-            if ($comment->getAuthor() === $this) {
-                $comment->setAuthor(null);
-            }
+            // if ($comment->getAuthor() === $this) {
+            //     $comment->setAuthor(null);
+            // }
         }
         return $this;
     }

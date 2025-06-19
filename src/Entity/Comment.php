@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Post as PostOperation;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\ApiProperty;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 #[ApiResource(
@@ -31,27 +32,27 @@ class Comment
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups(['comment:read'])]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(type: 'text')]
     #[Groups(['comment:read', 'comment:write'])]
     #[ApiProperty(example: 'This is a great post! Thanks for sharing.')]
-    private ?string $content = null;
+    private string $content;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['comment:read', 'comment:write'])]
     #[ApiProperty(example: '/api/users/1')]
-    private ?User $author = null;
+    private UserInterface $author;
 
     #[ORM\ManyToOne(targetEntity: Post::class, inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['comment:read', 'comment:write'])]
     #[ApiProperty(example: '/api/posts/1')]
-    private ?Post $post = null;
+    private Post $post;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column(options: ['default' => false])]
     private bool $isApproved = false;
@@ -75,25 +76,25 @@ class Comment
         $this->content = $content;
         return $this;
     }
-    public function getAuthor(): ?User
+    public function getAuthor(): UserInterface
     {
         return $this->author;
     }
-    public function setAuthor(?User $author): static
+    public function setAuthor(UserInterface $author): static
     {
         $this->author = $author;
         return $this;
     }
-    public function getPost(): ?Post
+    public function getPost(): Post
     {
         return $this->post;
     }
-    public function setPost(?Post $post): static
+    public function setPost(Post $post): static
     {
         $this->post = $post;
         return $this;
     }
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }

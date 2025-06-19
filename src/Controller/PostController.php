@@ -93,9 +93,9 @@ class PostController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $post = $postDto->toEntity($post);
             // Set publishedAt only if status is 'published'
-            if ($post->getStatus() === PostStatus::PUBLISHED && !$post->getPublishedAt()) {
+            if ($post->getStatus() === PostStatus::PUBLISHED->value && !$post->getPublishedAt()) {
                 $post->setPublishedAt(new \DateTimeImmutable());
-            } elseif ($post->getStatus() !== PostStatus::PUBLISHED) {
+            } elseif ($post->getStatus() !== PostStatus::PUBLISHED->value) {
                 $post->setPublishedAt(null);
             }
             $em->flush();

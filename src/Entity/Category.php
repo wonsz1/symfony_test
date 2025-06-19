@@ -33,20 +33,21 @@ class Category
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups(['category:read'])]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(length: 100)]
     #[Groups(['category:read', 'category:write', 'post:read'])]
-    private ?string $name = null;
+    private string $name;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column(length: 100, unique: true)]
     #[Groups(['category:read', 'category:write'])]
-    private ?string $slug = null;
+    private string $slug;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Post::class)]
+    /** @var Collection<int, Post> */
     private Collection $posts;
 
     public function __construct()
@@ -59,7 +60,7 @@ class Category
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -83,7 +84,7 @@ class Category
         return $this;
     }
 
-    public function getSlug(): ?string
+    public function getSlug(): string
     {
         return $this->slug;
     }
@@ -111,9 +112,9 @@ class Category
     public function removePost(Post $post): static
     {
         if ($this->posts->removeElement($post)) {
-            if ($post->getCategory() === $this) {
-                $post->setCategory(null);
-            }
+            // if ($post->getCategory() === $this) {
+            //     $post->setCategory(null);
+            // }
         }
         return $this;
     }

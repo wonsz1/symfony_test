@@ -3,12 +3,10 @@
 namespace App\Controller;
 
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class GoogleController extends AbstractController
 {
@@ -23,7 +21,7 @@ class GoogleController extends AbstractController
     }
 
     #[Route('/connect/google/check', name: 'connect_google_check')]
-    public function connectCheckAction()
+    public function connectCheckAction(): Response|RedirectResponse
     {
         // This method will be handled by the OAuth2 authenticator
         if (!$this->getUser()) {

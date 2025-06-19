@@ -16,17 +16,17 @@ use Symfony\Component\Routing\RouterInterface;
 
 class GoogleAuthenticatorTest extends TestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    private ClientRegistry $clientRegistry;
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    private EntityManagerInterface $entityManager;
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    private RouterInterface $router;
+    /** @var ClientRegistry&\PHPUnit\Framework\MockObject\MockObject */
+    private $clientRegistry;
+    /** @var EntityManagerInterface&\PHPUnit\Framework\MockObject\MockObject */
+    private $entityManager;
+    /** @var RouterInterface&\PHPUnit\Framework\MockObject\MockObject */
+    private $router;
     private GoogleAuthenticator $authenticator;
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    private OAuth2Client $oauth2Client;
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    private EntityRepository $userRepository;
+    /** @var OAuth2Client&\PHPUnit\Framework\MockObject\MockObject */
+    private $oauth2Client;
+    /** @var EntityRepository&\PHPUnit\Framework\MockObject\MockObject */
+    private $userRepository;
 
     protected function setUp(): void
     {
@@ -134,6 +134,7 @@ class GoogleAuthenticatorTest extends TestCase
 
         // Act
         $passport = $this->authenticator->authenticate($request);
+        /** @var User $user */
         $user = $passport->getUser();
 
         // Assert
@@ -192,6 +193,7 @@ class GoogleAuthenticatorTest extends TestCase
 
         // Act
         $passport = $this->authenticator->authenticate($request);
+        /** @var User $user */
         $user = $passport->getUser();
 
         // Assert

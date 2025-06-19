@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\ApiProperty;
 use App\Enumerations\PostStatus;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 #[ApiResource(
@@ -34,22 +35,22 @@ class Post
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups(['post:read'])]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(length: 255)]
     #[Groups(['post:read', 'post:write'])]
     #[ApiProperty(example: 'My First Post')]
-    private ?string $title = null;
+    private string $title;
 
     #[ORM\Column(length: 255, unique: true)]
     #[Groups(['post:read', 'post:write'])]
     #[ApiProperty(example: 'my-first-post')]
-    private ?string $slug = null;
+    private string $slug;
 
     #[ORM\Column(type: 'text')]
     #[Groups(['post:read', 'post:write'])]
     #[ApiProperty(example: 'This is the content of my first post.')]
-    private ?string $content = null;
+    private string $content;
 
     #[ORM\Column(type: 'text', nullable: true)]
     #[Groups(['post:read'])]
@@ -60,7 +61,7 @@ class Post
 
     #[ORM\Column]
     #[Groups(['post:read'])]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['post:read'])]
@@ -73,25 +74,26 @@ class Post
     #[ORM\Column(length: 50)]
     #[Groups(['post:read', 'post:write'])]
     #[ApiProperty(example: 'draft')]
-    private ?PostStatus $status = null;
+    private PostStatus $status;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'posts')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['post:read', 'post:write'])]
     #[ApiProperty(example: '/api/users/1')]
-    private ?User $author = null;
+    private UserInterface $author;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'posts')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['post:read', 'post:write'])]
     #[ApiProperty(example: '/api/categories/1')]
-    private ?Category $category = null;
+    private Category $category;
 
     #[ORM\Column(type: 'integer', options: ['default' => 0])]
     #[Groups(['post:read'])]
     private int $viewCount = 0;
 
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comment::class, cascade: ['remove'])]
+    /** @var Collection<int, Comment> */
     private Collection $comments;
 
     public function __construct()
@@ -101,11 +103,11 @@ class Post
         $this->viewCount = 0;
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -114,7 +116,7 @@ class Post
         $this->title = $title;
         return $this;
     }
-    public function getSlug(): ?string
+    public function getSlug(): string
     {
         return $this->slug;
     }
@@ -123,7 +125,7 @@ class Post
         $this->slug = $slug;
         return $this;
     }
-    public function getContent(): ?string
+    public function getContent(): string
     {
         return $this->content;
     }
@@ -150,7 +152,7 @@ class Post
         $this->featuredImage = $featuredImage;
         return $this;
     }
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -177,7 +179,7 @@ class Post
         $this->publishedAt = $publishedAt;
         return $this;
     }
-    public function getStatus(): ?string
+    public function getStatus(): string
     {
         return $this->status->value;
     }
@@ -186,20 +188,23 @@ class Post
         $this->status = $status;
         return $this;
     }
-    public function getAuthor(): ?User
+    public function getAuthor(): UserInterface
     {
         return $this->author;
     }
-    public function setAuthor(?User $author): static
+    public function setAuthor(UserInterface $author): static
     {
+        if (!$author instanceof User) {
+            throw new \TypeError('Expected instance of ' . User::class . ', got ' . get_class($author));
+        }
         $this->author = $author;
         return $this;
     }
-    public function getCategory(): ?Category
+    public function getCategory(): Category
     {
         return $this->category;
     }
-    public function setCategory(?Category $category): static
+    public function setCategory(Category $category): static
     {
         $this->category = $category;
         return $this;
@@ -227,9 +232,9 @@ class Post
     public function removeComment(Comment $comment): static
     {
         if ($this->comments->removeElement($comment)) {
-            if ($comment->getPost() === $this) {
-                $comment->setPost(null);
-            }
+            // if ($comment->getPost() === $this) {
+            //     $comment->setPost(null);
+            // }
         } return $this;
     }
 }
