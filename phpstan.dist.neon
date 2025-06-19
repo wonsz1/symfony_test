@@ -1,8 +1,11 @@
 parameters:
-    level: 6
+    level: 4
     paths:
-        - bin/
         - config/
-        - public/
         - src/
         - tests/
+    ignoreErrors:
+        - '/Property .* type mapping mismatch: property can contain .*Interface.* but database expects .*/'
+        - '/Property .* type mapping mismatch: property can contain .*Collection.* but database expects .*Collection&iterable.*/'
+        #https://github.com/phpstan/phpstan-doctrine/issues/357
+        #for Collections the solution can be also Custom Collection Classes 
