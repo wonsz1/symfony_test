@@ -1,0 +1,19 @@
+global:
+  scrape_interval: 15s # How frequently to scrape targets
+
+scrape_configs:
+  - job_name: 'symfony_app'
+    metrics_path: /metrics # The endpoint your Symfony app exposes
+    static_configs:
+      - targets: ['nginx:80'] # Your PHP-FPM service name in docker-compose, and its port (Symfony/Nginx will route to /metrics)
+    relabel_configs: # Optional: Add instance label for better identification if you scale
+      - source_labels: [__address__]
+        regex: '(.*):.*'
+        target_label: instance
+        replacement: '${1}'
+  - job_name: 'grafana'
+    static_configs:
+      - targets: ['grafana:3000'] # Internal Grafana metrics
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090'] # Internal Prometheus metrics
