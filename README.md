@@ -36,7 +36,11 @@ npm run dev
 http://localhost:5173
 
 PHPStan:
-docker-compose exec php vendor/bin/phpstan analyse src tests 
+docker-compose exec php vendor/bin/phpstan analyse 
 
 Added phpstan-doctrine to fix issue - Auto-Generated ID is never assigned int
 https://github.com/phpstan/phpstan-doctrine/issues/610
+
+Grafana: http://localhost:3000 (login with admin/admin initially)
+Prometheus: http://localhost:9090
+Query: app_api_calls_total

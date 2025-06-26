@@ -13,12 +13,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Enumerations\PostStatus;
+use App\Service\AppMetrics;
 
 class PostController extends AbstractController
 {
+    public function __construct(private AppMetrics $appMetrics)
+    {
+    }
+
     #[Route('/post', name: 'post_index')]
     public function index(PostRepository $postRepository): Response
     {
+        $this->appMetrics->incrementCall('post_index', 'GET');
         $posts = $postRepository->findBy([], ['createdAt' => 'DESC']);
         return $this->render('post/index.html.twig', [
             'posts' => $posts,
@@ -66,6 +72,7 @@ class PostController extends AbstractController
     #[Route('/post/{slug}', name: 'post_show')]
     public function show(string $slug, PostRepository $postRepository): Response
     {
+        $this->appMetrics->incrementCall('post_show', 'GET');
         $post = $postRepository->findOneBy(['slug' => $slug]);
         if (!$post) {
             throw $this->createNotFoundException('Post not found');

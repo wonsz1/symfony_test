@@ -39,6 +39,7 @@ class CommentController extends AbstractController
     }
 
     #[Route('/comment/add/{postSlug}', name: 'comment_add')]
+    #[IsGranted('ROLE_USER')]
     public function add(Request $request, string $postSlug, EntityManagerInterface $em): Response
     {
         $comment = new Comment();

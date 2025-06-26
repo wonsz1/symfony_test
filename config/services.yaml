@@ -21,3 +21,13 @@ services:
             - '../src/Kernel.php'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    Prometheus\Storage\Redis:
+        arguments:
+            - host: '%env(P_REDIS_HOST)%'
+              port: '%env(REDIS_PORT)%'
+              password: '%env(REDIS_PASSWORD)%'
+              # timeout: '%env(PROMETHEUS_REDIS_TIMEOUT)%'
+              # read_timeout: '%env(PROMETHEUS_REDIS_READ_TIMEOUT)%'
+              # persistent_connections: '%env(PROMETHEUS_REDIS_PERSISTENT_CONNECTIONS)%'
+    Prometheus\CollectorRegistry: ['@Prometheus\Storage\Redis']
